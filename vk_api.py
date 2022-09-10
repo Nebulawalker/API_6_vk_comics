@@ -25,10 +25,12 @@ def upload_image_to_vk_server(filepath: str, server_url: str) -> dict:
         }
         response = requests.post(url, files=payload)
         response.raise_for_status()
+        result = response.json()
+
         return {
-            "photo": response.json().get("photo"),
-            "server": response.json().get("server"),
-            "hash": response.json().get("hash")
+            "photo": result.get("photo"),
+            "server": result.get("server"),
+            "hash": result.get("hash")
         }
 
 
