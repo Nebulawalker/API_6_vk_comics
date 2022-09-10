@@ -11,7 +11,7 @@ def get_upload_url(vk_group_id: str, access_token: str, vk_api_version: str):
         "access_token": access_token,
         "v": vk_api_version
     }
-    response = requests.get(VK_BASE_URL + method, params=payload)
+    response = requests.get(f"{VK_BASE_URL}{method}", params=payload)
     response.raise_for_status()
     upload_info = response.json()
     return upload_info["response"].get("upload_url")
