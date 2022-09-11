@@ -7,7 +7,7 @@ from filesystem_helpers import download_images
 XKCD_BASE_URL = "https://xkcd.com/"
 
 
-def get_random_xkcd_comics() -> str:
+def get_random_xkcd_comic() -> str:
     url = f"{XKCD_BASE_URL}/info.0.json"
     response = requests.get(url)
     response.raise_for_status()
