@@ -2,14 +2,15 @@ import requests
 
 
 VK_BASE_URL = "https://api.vk.com/method/"
+VK_API_VERSION = "5.131"
 
 
-def get_upload_url(vk_group_id: str, access_token: str, vk_api_version: str):
+def get_upload_url(vk_group_id: str, access_token: str):
     method = "photos.getWallUploadServer"
     payload = {
         "group_id": vk_group_id,
         "access_token": access_token,
-        "v": vk_api_version
+        "v": VK_API_VERSION
     }
     response = requests.get(f"{VK_BASE_URL}{method}", params=payload)
     response.raise_for_status()
@@ -37,7 +38,6 @@ def upload_image_to_vk_server(filepath: str, server_url: str) -> dict:
 def save_image_to_vk_album(
         vk_group_id: str,
         access_token: str,
-        vk_api_version: str,
         upload_info: dict
         ):
     method = "photos.saveWallPhoto"
@@ -47,7 +47,7 @@ def save_image_to_vk_album(
         "hash": upload_info.get("hash"),
         "group_id": vk_group_id,
         "access_token": access_token,
-        "v": vk_api_version
+        "v": VK_API_VERSION
     }
     response = requests.post(f"{VK_BASE_URL}{method}", params=payload)
     response.raise_for_status()
@@ -60,17 +60,15 @@ def save_image_to_vk_album(
 
 def publish_post(
         access_token: str,
-        vk_api_version: str,
         vk_group_id: int,
         comics_info: dict
         ) -> None:
-    server_url = get_upload_url(vk_group_id, access_token, vk_api_version)
+    server_url = get_upload_url(vk_group_id, access_token)
     filepath = comics_info.get("downloaded_image")
     upload_info = upload_image_to_vk_server(filepath, server_url)
     saved_image_info = save_image_to_vk_album(
         vk_group_id,
         access_token,
-        vk_api_version,
         upload_info
     )
     message = comics_info.get("comics_commentary")
@@ -83,7 +81,7 @@ def publish_post(
         "message": message,
         "attachments": f"photo{owner_id}_{image_id}",
         "access_token": access_token,
-        "v": vk_api_version
+        "v": VK_API_VERSION
     }
     response = requests.post(f"{VK_BASE_URL}{method}", params=payload)
     response.raise_for_status()
