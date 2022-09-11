@@ -52,33 +52,29 @@ def save_image_to_vk_album(
     response = requests.post(f"{VK_BASE_URL}{method}", params=payload)
     response.raise_for_status()
     result_info = response.json()
-    return {
-        "owner_id": result_info["response"][0].get("owner_id"),
-        "image_id": result_info["response"][0].get("id")
-    }
+    owner_id = result_info["response"][0].get("owner_id")
+    image_id = result_info["response"][0].get("id")
+    return (owner_id, image_id)
 
 
 def publish_post(
         access_token: str,
         vk_group_id: int,
-        comics_info: dict
+        image_filepath: str,
+        commentary: str
         ) -> None:
     server_url = get_upload_url(vk_group_id, access_token)
-    filepath = comics_info.get("downloaded_image")
-    upload_info = upload_image_to_vk_server(filepath, server_url)
-    saved_image_info = save_image_to_vk_album(
+    upload_info = upload_image_to_vk_server(image_filepath, server_url)
+    owner_id, image_id = save_image_to_vk_album(
         vk_group_id,
         access_token,
         upload_info
     )
-    message = comics_info.get("comics_commentary")
-    owner_id = saved_image_info.get("owner_id")
-    image_id = saved_image_info.get("image_id")
     method = "wall.post"
     payload = {
         "owner_id": f"-{vk_group_id}",
         "from_group": 1,
-        "message": message,
+        "message": commentary,
         "attachments": f"photo{owner_id}_{image_id}",
         "access_token": access_token,
         "v": VK_API_VERSION

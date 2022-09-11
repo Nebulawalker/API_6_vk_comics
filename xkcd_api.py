@@ -23,8 +23,5 @@ def get_random_xkcd_comic() -> str:
     with open(filepath, "wb") as file:
         file.write(response.content)
 
-    comics_commentary = record.get("alt")
-    return {
-        "downloaded_image": filepath,
-        "comics_commentary": comics_commentary
-    }
+    comic_commentary = record.get("alt")
+    return (filepath, comic_commentary)
