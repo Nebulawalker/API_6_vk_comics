@@ -1,7 +1,7 @@
 import requests
 from random import randint
 
-from filesystem_helpers import download_images
+from filesystem_helpers import download_image
 
 
 XKCD_BASE_URL = "https://xkcd.com/"
@@ -18,7 +18,7 @@ def get_random_xkcd_comic() -> str:
     record = response.json()
     image_link = record.get("img")
     comics_commentary = record.get("alt")
-    filepath = download_images((image_link,), "XKCD-comics")
+    filepath = download_image(image_link)
     return {
         "downloaded_image": filepath,
         "comics_commentary": comics_commentary
