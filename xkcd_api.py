@@ -19,7 +19,7 @@ def get_random_xkcd_comic() -> str:
     image_link = record.get("img")
     response = requests.get(image_link)
     response.raise_for_status()
-    filepath = os.path.basename(url)
+    filepath = os.path.basename(image_link)
     with open(filepath, "wb") as file:
         file.write(response.content)
 
