@@ -27,24 +27,25 @@ def upload_image_to_vk_server(filepath: str, server_url: str) -> dict:
         response = requests.post(url, files=payload)
         response.raise_for_status()
     result = response.json()
+    photo = result.get("photo")
+    server = result.get("server")
+    image_hash = result.get("hash")
 
-    return {
-        "photo": result.get("photo"),
-        "server": result.get("server"),
-        "hash": result.get("hash")
-    }
+    return (photo, server, image_hash)
 
 
 def save_image_to_vk_album(
         vk_group_id: str,
         access_token: str,
-        upload_info: dict
+        photo: str,
+        server: str,
+        image_hash: str
         ):
     method = "photos.saveWallPhoto"
     payload = {
-        "photo": upload_info.get("photo"),
-        "server": upload_info.get("server"),
-        "hash": upload_info.get("hash"),
+        "photo": photo,
+        "server": server,
+        "hash": image_hash,
         "group_id": vk_group_id,
         "access_token": access_token,
         "v": VK_API_VERSION
@@ -64,11 +65,15 @@ def publish_post(
         commentary: str
         ) -> None:
     server_url = get_upload_url(vk_group_id, access_token)
-    upload_info = upload_image_to_vk_server(image_filepath, server_url)
+    photo, server, image_hash = upload_image_to_vk_server(
+        image_filepath, server_url
+        )
     owner_id, image_id = save_image_to_vk_album(
         vk_group_id,
         access_token,
-        upload_info
+        photo,
+        server,
+        image_hash
     )
     method = "wall.post"
     payload = {
