@@ -5,11 +5,11 @@ VK_BASE_URL = "https://api.vk.com/method/"
 VK_API_VERSION = "5.131"
 
 
-def get_upload_url(vk_group_id: str, access_token: str):
+def get_upload_url(vk_group_id: str, vk_access_token: str):
     method = "photos.getWallUploadServer"
     payload = {
         "group_id": vk_group_id,
-        "access_token": access_token,
+        "access_token": vk_access_token,
         "v": VK_API_VERSION
     }
     response = requests.get(f"{VK_BASE_URL}{method}", params=payload)
@@ -36,7 +36,7 @@ def upload_image_to_vk_server(filepath: str, server_url: str) -> dict:
 
 def save_image_to_vk_album(
         vk_group_id: str,
-        access_token: str,
+        vk_access_token: str,
         photo: str,
         server: str,
         image_hash: str
@@ -47,7 +47,7 @@ def save_image_to_vk_album(
         "server": server,
         "hash": image_hash,
         "group_id": vk_group_id,
-        "access_token": access_token,
+        "access_token": vk_access_token,
         "v": VK_API_VERSION
     }
     response = requests.post(f"{VK_BASE_URL}{method}", params=payload)
@@ -59,18 +59,18 @@ def save_image_to_vk_album(
 
 
 def publish_post(
-        access_token: str,
+        vk_access_token: str,
         vk_group_id: int,
         image_filepath: str,
         commentary: str
         ) -> None:
-    server_url = get_upload_url(vk_group_id, access_token)
+    server_url = get_upload_url(vk_group_id, vk_access_token)
     photo, server, image_hash = upload_image_to_vk_server(
         image_filepath, server_url
         )
     owner_id, image_id = save_image_to_vk_album(
         vk_group_id,
-        access_token,
+        vk_access_token,
         photo,
         server,
         image_hash
@@ -81,7 +81,7 @@ def publish_post(
         "from_group": 1,
         "message": commentary,
         "attachments": f"photo{owner_id}_{image_id}",
-        "access_token": access_token,
+        "access_token": vk_access_token,
         "v": VK_API_VERSION
     }
     response = requests.post(f"{VK_BASE_URL}{method}", params=payload)

@@ -18,18 +18,18 @@ poetry install
 ```bash
 mv .env_example .env
 ```
-5. В .env нужно внести ACCESS_TOKEN, VK_GROUP_ID.
+5. В .env нужно внести VK_ACCESS_TOKEN, VK_GROUP_ID.
 Пример файла .env:
 ```text
-ACCESS_TOKEN={Ваш токен}
+VK_ACCESS_TOKEN={Ваш токен}
 VK_GROUP_ID={ID группы, в которую будут публиковаться комиксы}
 ```
 
-Для получения ACCESS_TOKEN:
+Для получения VK_ACCESS_TOKEN:
 - Создать приложение https://dev.vk.com/ (тип приложения standalone)
 
 - Получить client_id приложения (нажмите редактировать рядом с созданным приложением)
-- Получить ACCESS_TOKEN запросом через браузер:
+- Получить VK_ACCESS_TOKEN запросом через браузер:
 ```text
 https://oauth.vk.com/authorize?client_id={ID Вашего приложения}&scope=photos,groups,wall,offline&response_type=token&v=5.131
 ```
