@@ -14,14 +14,14 @@ def get_random_xkcd_comic() -> str:
     url = f"{XKCD_BASE_URL}{str(comics_release)}/info.0.json"
     response = requests.get(url)
     response.raise_for_status()
-    record = response.json()
+    comic_params = response.json()
 
-    image_link = record.get("img")
+    image_link = comic_params["img"]
     response = requests.get(image_link)
     response.raise_for_status()
     filepath = os.path.basename(image_link)
     with open(filepath, "wb") as file:
         file.write(response.content)
 
-    comic_commentary = record.get("alt")
+    comic_commentary = comic_params.get("alt")
     return filepath, comic_commentary

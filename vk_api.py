@@ -26,10 +26,10 @@ def upload_image_to_vk_server(filepath: str, server_url: str) -> dict:
         }
         response = requests.post(url, files=payload)
         response.raise_for_status()
-    result = response.json()
-    photo = result.get("photo")
-    server = result.get("server")
-    image_hash = result.get("hash")
+    uploaded_image_params = response.json()
+    photo = uploaded_image_params.get("photo")
+    server = uploaded_image_params.get("server")
+    image_hash = uploaded_image_params.get("hash")
 
     return photo, server, image_hash
 
@@ -52,9 +52,9 @@ def save_image_to_vk_album(
     }
     response = requests.post(f"{VK_BASE_URL}{method}", params=payload)
     response.raise_for_status()
-    result_info = response.json()
-    owner_id = result_info["response"][0].get("owner_id")
-    image_id = result_info["response"][0].get("id")
+    saved_image_params = response.json()
+    owner_id = saved_image_params["response"][0].get("owner_id")
+    image_id = saved_image_params["response"][0].get("id")
     return owner_id, image_id
 
 
