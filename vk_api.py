@@ -31,7 +31,7 @@ def upload_image_to_vk_server(filepath: str, server_url: str) -> dict:
     server = result.get("server")
     image_hash = result.get("hash")
 
-    return (photo, server, image_hash)
+    return photo, server, image_hash
 
 
 def save_image_to_vk_album(
@@ -55,7 +55,7 @@ def save_image_to_vk_album(
     result_info = response.json()
     owner_id = result_info["response"][0].get("owner_id")
     image_id = result_info["response"][0].get("id")
-    return (owner_id, image_id)
+    return owner_id, image_id
 
 
 def publish_post(

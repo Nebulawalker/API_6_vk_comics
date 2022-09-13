@@ -24,4 +24,4 @@ def get_random_xkcd_comic() -> str:
         file.write(response.content)
 
     comic_commentary = record.get("alt")
-    return (filepath, comic_commentary)
+    return filepath, comic_commentary
